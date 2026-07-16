@@ -23,9 +23,9 @@ np.random.seed(42)
 
 
 # 1. 데이터 불러오기
-# gpascore.csv는 이 파이썬 파일과 같은 폴더에서 실행한다고 가정합니다.
-# 그래서 기존 코드처럼 파일 이름만 적었습니다.
-data = pd.read_csv("gpascore.csv")
+# gpascore.csv는 data 폴더 안에 있다고 가정합니다.
+# 그래서 data/gpascore.csv 경로로 불러옵니다.
+data = pd.read_csv("data/gpascore.csv")
 
 print("\n[데이터 앞부분 확인]")
 print(data.head())
@@ -238,3 +238,4 @@ for person, prediction in zip(new_people.to_numpy(), predictions):
 # - train/test 분리는 모델이 처음 보는 데이터도 잘 맞히는지 확인하기 위해 필요합니다.
 # - EarlyStopping은 의미 없이 오래 학습하거나 과적합되는 것을 줄이는 데 도움이 됩니다.
 # - 그래도 이 데이터는 작고 입력 정보가 적어서 성능에는 한계가 있습니다.
+

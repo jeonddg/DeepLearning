@@ -1,7 +1,7 @@
 ﻿"""대학원 합격 여부 예측 기본 실습.
 
 이 파일의 목표
-- gpascore.csv 파일을 불러온다.
+- data/gpascore.csv 파일을 불러온다.
 - GRE, GPA, rank 값을 입력으로 사용한다.
 - admit 값을 정답으로 사용해서 합격 여부를 예측하는 모델을 학습한다.
 
@@ -25,7 +25,7 @@ import tensorflow as tf
 # - gre: GRE 시험 점수입니다.
 # - gpa: 학점입니다.
 # - rank: 지원한 학교의 등급입니다. 보통 숫자가 낮을수록 더 좋은 등급으로 봅니다.
-data = pd.read_csv("gpascore.csv")
+data = pd.read_csv("data/gpascore.csv")
 
 # head()는 데이터의 맨 앞 5줄을 보여줍니다.
 # CSV가 제대로 불러와졌는지 확인할 때 자주 사용합니다.
@@ -235,4 +235,5 @@ print(predictions)
 - epochs 줄이기
 - 예측 결과를 0~1 확률로 해석하는 방법 익히기
 """
+
 
