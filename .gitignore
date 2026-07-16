@@ -1,5 +1,12 @@
-.venv/
+﻿.venv/
 __pycache__/
 *.pyc
 .env
 notes/
+02_image_learning_cnn/data/
+*.zip
+*.h5
+*.keras
+checkpoints/
+saved_model/
+
