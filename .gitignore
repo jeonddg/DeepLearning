@@ -9,4 +9,6 @@ notes/
 *.keras
 checkpoints/
 saved_model/
+02_image_learning_cnn/model/
+02_image_learning_cnn/checkpoints/
 

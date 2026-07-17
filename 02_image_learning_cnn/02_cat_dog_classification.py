@@ -250,6 +250,7 @@ model.fit(
     validation_data=val_ds,
 )
 
+model.save("model/cat_dog_model.keras")
 
 # 핵심 정리
 # - Kaggle 원본 train 폴더에는 cat/dog 이미지가 섞여 있습니다.
