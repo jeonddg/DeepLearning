@@ -151,16 +151,16 @@ print(val_ds)
 
 # 8. 이미지가 Dataset 안에서 어떤 모양인지 확인하기
 # train_ds.take(1)은 batch 하나만 가져옵니다.
-# images.shape는 (32, 64, 64, 3) 형태입니다.
+# images.shape는 (32, 256, 256, 3) 형태입니다.
 # - 32: batch 안 이미지 개수
-# - 64: 이미지 세로
-# - 64: 이미지 가로
+# - 256: 이미지 세로
+# - 256: 이미지 가로
 # - 3: RGB 컬러 채널
 """
 import matplotlib.pyplot as plt
 
 for images, labels in train_ds.take(1):
-    print(images.shape) # 출력은 (32, 64, 64, 3) 형태입니다. batch 안 이미지 개수만큼 이미지가 있습니다.
+    print(images.shape) # 출력은 (32, 256, 256, 3) 형태입니다. batch 안 이미지 개수만큼 이미지가 있습니다.
     print(labels.shape) # 출력은 (32,) 형태입니다. batch 안 이미지 개수만큼 라벨이 있습니다.
 
     # astype("uint8")는 데이터 타입을 정수형으로 바꿉니다.
@@ -194,15 +194,14 @@ val_ds = val_ds.map(normalize)
 # Dropout은 과적합을 줄이기 위해 일부 노드를 랜덤하게 쉬게 하는 층입니다.
 # 데이터가 많지 않거나 모델이 너무 잘 외우는 것 같을 때 도움이 됩니다.
 model = tf.keras.Sequential([
+
+    tf.keras.layers.RandomFlip("horizontal", input_shape=(64, 64, 3)), # 가로로 뒤집기, horizontal, vertical, horizontal_and_vertical
+    tf.keras.layers.RandomRotation(0.03), # 약간 회전
+    tf.keras.layers.RandomZoom(0.05), # 약간 확대/축소
+
     # 첫 번째 특징 추출 단계입니다.
     # 입력 이미지는 64x64 크기의 RGB 이미지라 input_shape=(64, 64, 3)입니다.
-    tf.keras.layers.Conv2D(
-        32,
-        (3, 3),
-        padding="same",
-        activation="relu",
-        input_shape=(64, 64, 3),
-    ),
+    tf.keras.layers.Conv2D(32, (3, 3), padding="same", activation="relu"),
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
 
     # 두 번째 특징 추출 단계입니다.
@@ -216,6 +215,10 @@ model = tf.keras.Sequential([
 
     # Conv2D 결과는 아직 2차원 특징맵이므로 Dense 층에 넣기 위해 1차원으로 펼칩니다.
     tf.keras.layers.Flatten(),
+
+    # GlobalAveragePooling2D()는 Flatten()과 비슷하지만, 특징맵의 평균값을 구해 1차원으로 만듭니다.
+    # 더 빠른 학습과 과적합 방지에 도움이 됩니다.
+    #tf.keras.layers.GlobalAveragePooling2D(),
 
     tf.keras.layers.Dense(128, activation="relu"),
     tf.keras.layers.Dropout(0.2),
@@ -244,11 +247,7 @@ model.compile(
 # 13. 모델 학습하기
 # train_ds로 학습하고 val_ds로 검증합니다.
 # validation accuracy가 train accuracy보다 많이 낮으면 과적합을 의심할 수 있습니다.
-model.fit(
-    train_ds,
-    epochs=10,
-    validation_data=val_ds,
-)
+model.fit(train_ds, epochs=10, validation_data=val_ds,)
 
 model.save("model/cat_dog_model.keras")
 
@@ -256,7 +255,7 @@ model.save("model/cat_dog_model.keras")
 # - Kaggle 원본 train 폴더에는 cat/dog 이미지가 섞여 있습니다.
 # - image_dataset_from_directory()를 쓰려면 클래스별 폴더 구조가 필요합니다.
 # - 그래서 dataset/cat, dataset/dog 폴더로 이미지를 나누어 복사했습니다.
-# - 이미지 크기는 64x64로 맞추고, 픽셀값은 0~1로 정규화했습니다.
+# - 이미지 크기는 256x256로 맞추고, 픽셀값은 0~1로 정규화했습니다.
 # - Conv2D는 이미지 특징을 뽑고, MaxPooling2D는 중요한 특징만 남기며 크기를 줄입니다.
 # - Dropout은 과적합을 줄이기 위해 사용했습니다.
 
