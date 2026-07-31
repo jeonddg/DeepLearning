@@ -14,3 +14,5 @@ saved_model/
 logs/
 02_image_learning_cnn/logs/
 
+02_image_learning_cnn/model.png
+02_image_learning_cnn/model_functional.png
